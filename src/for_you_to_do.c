@@ -160,8 +160,86 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
  **/
 void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
 {
-    /* add your code here */
-    /* please just copy from your lab1 function optimal( ... ) */
+    int i,j,k,ic,jc,kc;
+    register int m;
+    int block_size = 3;
+
+    for(ic = 0; ic < n; ic += b){
+        for(jc = 0;jc < n; jc += b){
+            for(kc =0; kc < n; kc += b){
+
+
+                for (i=ic; i<(ic + b); i+=block_size){
+                    for (j=jc; j<(jc + b); j+=block_size) {
+
+                        //9 register used for matrix C
+                        register double c00 = C[i * n + j];
+                        register double c01 = C[i * n + (j + 1)];
+                        register double c02 = C[i * n + (j + 2)];
+
+                        register double c10 = C[(i + 1) * n + j];
+                        register double c11 = C[(i + 1) * n + (j + 1)];
+                        register double c12 = C[(i + 1) * n + (j + 2)];
+
+                        register double c20 = C[(i + 2) * n + j];
+                        register double c21 = C[(i + 2) * n + (j + 1)];
+                        register double c22 = C[(i + 2) * n + (j + 2)];
+
+
+                        //6 registers INIT for A and B matrix
+                        register double a00;
+                        register double a10;
+                        register double a20;
+                        // register double a30;
+
+                        register double b00;
+                        register double b01;
+                        register double b02;
+                        // register double b03;
+
+                        for (k=kc; k<(kc + b); k+=block_size){
+                            for(m = 0; m < block_size; m++){
+                                a00 = A[i * n + k + m];
+                                a10 = A[(i + 1)*n + k + m];
+                                a20 = A[(i + 2)*n + k + m];
+
+                                b00 = B[(k + m) * n + (j)];
+                                b01 = B[(k + m) * n + (j + 1)];
+                                b02 = B[(k + m) * n + (j + 2)];
+
+                                //Start doing the computing process
+                                c00 += a00 * b00;
+                                c01 += a00 * b01;
+                                c02 += a00 * b02;
+                                c10 += a10 * b00;
+                                c11 += a10 * b01;
+                                c12 += a10 * b02;
+                                c20 += a20 * b00;
+                                c21 += a20 * b01;
+                                c22 += a20 * b02;
+                            }
+                            
+
+                        }
+                        //Write back the value to matrix C
+                        C[i * n + j] = c00;
+                        C[i * n + (j + 1)] = c01;
+                        C[i * n + (j + 2)] = c02;
+
+                        C[(i + 1) * n + j] = c10;
+                        C[(i + 1) * n + (j + 1)] = c11;
+                        C[(i + 1) * n + (j + 2)] = c12;
+
+                        C[(i + 2) * n + j] = c20;
+                        C[(i + 2) * n + (j + 1)] = c21;
+                        C[(i + 2) * n + (j + 2)] = c22;
+
+                    }
+                }
+
+            }
+        }
+    }
     return;
 }
 
