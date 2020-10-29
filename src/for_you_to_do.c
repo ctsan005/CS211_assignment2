@@ -54,26 +54,26 @@ int mydgetrf(double *A, int *ipiv, int n)
                 ipiv[maxind] = temps;
 
                 //swap row for matrix method 1
-                int j;
-                for(j = 0; j < n; j++){
-                    double k;
-                    k = A[i * n + j];
-                    A[i * n + j] = A[maxind * n + j];
-                    A[maxind * n + j] = k;
-                }
+                // int j;
+                // for(j = 0; j < n; j++){
+                //     double k;
+                //     k = A[i * n + j];
+                //     A[i * n + j] = A[maxind * n + j];
+                //     A[maxind * n + j] = k;
+                // }
 
                 //swap row method 2 -- need to test which one is faster
-                // double trow[n];
-                // memcpy(trow, A + i * n, n*sizeof(double));
-                // memcpy(A + i * n, A + maxind * n, n*sizeof(double));
-                // memcpy(A + maxind * n, trow, n*sizeof(double));
+                double trow[n];
+                memcpy(trow, A + i * n, n*sizeof(double));
+                memcpy(A + i * n, A + maxind * n, n*sizeof(double));
+                memcpy(A + maxind * n, trow, n*sizeof(double));
             }
 
         }
 
         int j;
         for(j = i + 1; j <n;j++){
-            A[j*n + i] = A[i*n + i] / A[i*n + i];
+            A[j*n + i] = A[j*n + i] / A[i*n + i];
             int k;
             for(k =  i + 1; k < n; k++){
                 A[j*n + k] = A[j*n + k] - A[j*n + i] * A[i*n + k];
