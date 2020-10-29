@@ -29,7 +29,8 @@ int get_block_size(){
 int mydgetrf(double *A, int *ipiv, int n) 
 {
     /* add your code here */
-    int i, maxind, max;
+    int i, maxind;
+    double max;
     for(i = 0; i < n; i++){
         maxind = i;
         max = fabs(A[i*n + i]);
