@@ -29,6 +29,56 @@ int get_block_size(){
 int mydgetrf(double *A, int *ipiv, int n) 
 {
     /* add your code here */
+    int i, maxind, max;
+    for(i = 0; i < n; i++){
+        maxind = i;
+        max = fabs(A[i*n + i]);
+        int t;
+        for(t = i+1; t < n; t++){
+            if(fabs(A[t*n + i]) > max){
+                maxind = t;
+                max = fabs(A[t*n + i]);
+            }
+        }
+
+        if(max == 0){
+            printf("LU factoration failed: coefficient matrix is singular");
+            return -1;
+        }
+        else{
+            if(maxind != i){
+                // save pivoting information
+                int temps= ipiv[i];
+                ipiv[i] = ipiv[maxind];
+                ipiv[maxind] = temps;
+
+                //swap row for matrix method 1
+                int j;
+                for(j = 0; j < n; j++){
+                    double k;
+                    k = A[i * n + j];
+                    A[i * n + j] = A[maxind * n + j];
+                    A[maxind * n + j] = k;
+                }
+
+                //swap row method 2 -- need to test which one is faster
+                // double trow[n];
+                // memcpy(trow, A + i * n, n*sizeof(double));
+                // memcpy(A + i * n, A + maxind * n, n*sizeof(double));
+                // memcpy(A + maxind * n, trow, n*sizeof(double));
+            }
+
+        }
+
+        int j;
+        for(j = i + 1; j <n;j++){
+            A[j*n + i] = A[i*n + i] / A[i*n + i];
+            int k;
+            for(k =  i + 1; k < n; k++){
+                A[j*n + k] = A[j*n + k] - A[j*n + i] * A[i*n + k];
+            }
+        }
+    }
 
     return 0;
 }
@@ -62,7 +112,44 @@ int mydgetrf(double *A, int *ipiv, int n)
  **/
 void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
 {
+    int i,j;
+    double sum;
     /* add your code here */
+    if(UPLO == 'L'){
+        double y[n];
+        
+        y[0] = B[ipiv[0]];
+        for(i = 1; i < n; i++ ){
+           sum = 0;
+           for(j = 0; j < i; j++ ){
+               sum += y[j] * A[i*n + j];
+           } 
+           y[i] = b[ipiv[i]] - sum;
+        }
+
+        for(i = 0; i < n; i++){
+            B[i] = y[i]
+        }
+    }
+
+    else if(UPLO == 'U'){
+        double x[n];
+        int i,j;
+        double sum;
+
+        x[n-1] = B[n-1] / A[(n-1) * n + n - 1];
+
+        for(i = n - 2; i >= 0; i-- ){
+            sum = 0;
+            for(j = i + 1; j < n; j++){
+                sum += x[j] * A[i*n + j];
+            }
+            x[i] = (B[i] - sum) / A[i*n + i];
+        }
+        for(i = 0; i < n; i++){
+            B[i] = x[i]
+        }
+    }
     return;
 }
 
