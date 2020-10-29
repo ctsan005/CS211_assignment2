@@ -160,7 +160,7 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
  **/
 void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
 {
-    int i,j,k,ic,jc,kc;
+    int ic,jc,kc;
     register int m;
     int block_size = 3;
 
