@@ -165,26 +165,26 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
     register int m;
     int block_size = 3;
 
-    for(ic = 0; ic < n; ic += b){
-        for(jc = 0;jc < n; jc += b){
-            for(kc =0; kc < n; kc += b){
+    for(; i < n; i += b){
+        for(;j < n; j += b){
+            for(; k < k + b; k += b){
 
 
-                for (i=ic; i<(ic + b); i+=block_size){
-                    for (j=jc; j<(jc + b); j+=block_size) {
+                for (ic=i; ic<(i + b); ic+=block_size){
+                    for (jc=j; jc<(j + b); jc+=block_size) {
 
                         //9 register used for matrix C
-                        register double c00 = C[i * n + j];
-                        register double c01 = C[i * n + (j + 1)];
-                        register double c02 = C[i * n + (j + 2)];
+                        register double c00 = C[ic * n + jc];
+                        register double c01 = C[ic * n + (jc + 1)];
+                        register double c02 = C[ic * n + (jc + 2)];
 
-                        register double c10 = C[(i + 1) * n + j];
-                        register double c11 = C[(i + 1) * n + (j + 1)];
-                        register double c12 = C[(i + 1) * n + (j + 2)];
+                        register double c10 = C[(ic + 1) * n + jc];
+                        register double c11 = C[(ic + 1) * n + (jc + 1)];
+                        register double c12 = C[(ic + 1) * n + (jc + 2)];
 
-                        register double c20 = C[(i + 2) * n + j];
-                        register double c21 = C[(i + 2) * n + (j + 1)];
-                        register double c22 = C[(i + 2) * n + (j + 2)];
+                        register double c20 = C[(ic + 2) * n + jc];
+                        register double c21 = C[(ic + 2) * n + (jc + 1)];
+                        register double c22 = C[(ic + 2) * n + (jc + 2)];
 
 
                         //6 registers INIT for A and B matrix
@@ -198,42 +198,42 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
                         register double b02;
                         // register double b03;
 
-                        for (k=kc; k<(kc + b); k+=block_size){
+                        for (kc=k; kc<(k + b); kc+=block_size){
                             for(m = 0; m < block_size; m++){
-                                a00 = A[i * n + k + m];
-                                a10 = A[(i + 1)*n + k + m];
-                                a20 = A[(i + 2)*n + k + m];
+                                a00 = A[ic * n + kc + m];
+                                a10 = A[(ic + 1)*n + kc + m];
+                                a20 = A[(ic + 2)*n + kc + m];
 
-                                b00 = B[(k + m) * n + (j)];
-                                b01 = B[(k + m) * n + (j + 1)];
-                                b02 = B[(k + m) * n + (j + 2)];
+                                b00 = B[(kc + m) * n + (jc)];
+                                b01 = B[(kc + m) * n + (jc + 1)];
+                                b02 = B[(kc + m) * n + (jc + 2)];
 
                                 //Start doing the computing process
-                                c00 += a00 * b00;
-                                c01 += a00 * b01;
-                                c02 += a00 * b02;
-                                c10 += a10 * b00;
-                                c11 += a10 * b01;
-                                c12 += a10 * b02;
-                                c20 += a20 * b00;
-                                c21 += a20 * b01;
-                                c22 += a20 * b02;
+                                c00 -= a00 * b00;
+                                c01 -= a00 * b01;
+                                c02 -= a00 * b02;
+                                c10 -= a10 * b00;
+                                c11 -= a10 * b01;
+                                c12 -= a10 * b02;
+                                c20 -= a20 * b00;
+                                c21 -= a20 * b01;
+                                c22 -= a20 * b02;
                             }
                             
 
                         }
                         //Write back the value to matrix C
-                        C[i * n + j] = c00;
-                        C[i * n + (j + 1)] = c01;
-                        C[i * n + (j + 2)] = c02;
+                        C[ic * n + jc] = c00;
+                        C[ic * n + (jc + 1)] = c01;
+                        C[ic * n + (jc + 2)] = c02;
 
-                        C[(i + 1) * n + j] = c10;
-                        C[(i + 1) * n + (j + 1)] = c11;
-                        C[(i + 1) * n + (j + 2)] = c12;
+                        C[(ic + 1) * n + jc] = c10;
+                        C[(ic + 1) * n + (jc + 1)] = c11;
+                        C[(ic + 1) * n + (jc + 2)] = c12;
 
-                        C[(i + 2) * n + j] = c20;
-                        C[(i + 2) * n + (j + 1)] = c21;
-                        C[(i + 2) * n + (j + 2)] = c22;
+                        C[(ic + 2) * n + jc] = c20;
+                        C[(ic + 2) * n + (jc + 1)] = c21;
+                        C[(ic + 2) * n + (jc + 2)] = c22;
 
                     }
                 }
@@ -273,6 +273,87 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
  **/
 int mydgetrf_block(double *A, int *ipiv, int n, int b) 
 {
+
+    /* add your code here */
+    int i,j,k,ic,t, maxind;
+    double max;
+
+    for(ic = 0; ic <n;ic +=b){
+        for(i = ic; i < ic+b ; i++){
+            maxind = i;
+            max = fabs(A[i*n + i]);
+            for(t = i+1; t < n; t++){
+                if(fabs(A[t*n + i]) > max){
+                    maxind = t;
+                    max = fabs(A[t*n + i]);
+                }
+            }
+
+            if(max == 0){
+                printf("LU factoration failed: coefficient matrix is singular");
+                return -1;
+            }
+            else{
+                if(maxind != i){
+                    // save pivoting information
+                    int temps= ipiv[i];
+                    ipiv[i] = ipiv[maxind];
+                    ipiv[maxind] = temps;
+
+                    //swap row for matrix method 1
+                    // int j;
+                    // for(j = 0; j < n; j++){
+                    //     double k;
+                    //     k = A[i * n + j];
+                    //     A[i * n + j] = A[maxind * n + j];
+                    //     A[maxind * n + j] = k;
+                    // }
+
+                    //swap row method 2 -- need to test which one is faster
+                    double trow[n];
+                    memcpy(trow, A + i * n, n*sizeof(double));
+                    memcpy(A + i * n, A + maxind * n, n*sizeof(double));
+                    memcpy(A + maxind * n, trow, n*sizeof(double));
+                }
+
+            }
+
+            for(j = i + 1; j <n;j++){
+                A[j*n + i] = A[j*n + i] / A[i*n + i];
+
+                for(k = i + 1; k < i + b; k++){
+                    A[j*n + k] = A[j*n + k] - A[j*n + i] * A[i*n + k];
+                }
+            }
+        }
+
+        //update A(ib:end, end+1:n), basically same method as before, use the value store in A(ib:n, ib:end)
+        register double total;
+        //end = ic + b
+        for(i = ic; i < ic + b; i++){
+            for(j= ic;j < n;j++){
+                total = 0;
+                for(k = ic; k < i; k++){
+                    // A[i*n - j] -= A[i*n + k] * A[k*n + j];
+                    sum += A[i*n + k] * A[k*n + j];
+                }
+                A[i*n + j] -= total;
+            }
+        }
+
+        for(i = ic; i < n;i++){
+            for(j = ic; j < n; j++){
+
+            }
+        }
+
+        // update A(end + 1: n , end + 1 : n)
+        // end = ic + b
+        mydgemm(A, A, A,n, ic + b, ic + b, ic, b);
+    }
+
+    
+
     return 0;
 }
 
