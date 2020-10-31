@@ -177,18 +177,18 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
                 printf("j1 error\n");
                 return;
             }
-            for(k1 = k; k1 < k1 + b; k1 += b){
+            for(k1 = k; k1 < k + b; k1 += b){
                 if(k1 >= n){
                     printf("k1 error\n");
                     return;
                 }
 
-                for (ic=i1; ic<(ic + b); ic+=block_size){
+                for (ic=i1; ic<(i1 + b); ic+=block_size){
                     if(ic >= n){
                         printf("ic error\n");
                         return;
                     }
-                    for (jc=j1; jc<(jc + b); jc+=block_size) {
+                    for (jc=j1; jc<(j1 + b); jc+=block_size) {
 
                         if(jc >= n){
                             printf("jc error\n");
@@ -224,7 +224,7 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
                         register double b02;
                         // register double b03;
 
-                        for (kc=k1; kc<(kc + b); kc+=block_size){
+                        for (kc=k1; kc<(k1 + b); kc+=block_size){
                             if(kc >= n){
                                 printf("kc error\n");
                                 printf("i1 = %i, j1 = %i, k1 = %i, ic = %i, jc = %i, kc = %i\n",i1,j1,k1,ic,jc,kc);
