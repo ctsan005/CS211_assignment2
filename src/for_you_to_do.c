@@ -174,10 +174,21 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
 
             for(k1 = k; k1 < k + b; k1 += b){
 
+                if(k1 >= n){
+                    printf("error for k1\n");
+                }
+
 
                 for (ic=i1; ic<(i1 + b); ic+=block_size){
+                    if(ic >= n){
+                        printf("error for ic\n");
+                    }
 
                     for (jc=j1; jc<(j1 + b); jc+=block_size) {
+
+                        if(jc >= n){
+                            printf("error for jc\n");
+                        }
 
 
                         //9 register used for matrix C
@@ -210,6 +221,9 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
                         // register double b03;
 
                         for (kc=k1; kc<(k1 + b); kc+=block_size){
+                            if(kc >= n){
+                                printf("error for kc\n");
+                            }
 
                             //use for debug
 
@@ -221,6 +235,10 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
 
 
                             for(m = 0; m < block_size; m++){
+
+                                if((kc + m) >= n){
+                                    printf("error for kc + m\n");
+                                }
                                 
                                 a00 = A[ic * n + kc + m];
                                 a10 = A[(ic + 1)*n + kc + m];
@@ -302,10 +320,19 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
     double max;
 
     for(ic = 0; ic <n;ic +=b){
+        if(ic >= n){
+            printf("error for ic\n");
+        }
         for(i = ic; i < ic+b ; i++){
+            if(i >= n){
+                printf("error for i\n");
+            }
             maxind = i;
             max = fabs(A[i*n + i]);
             for(t = i+1; t < n; t++){
+                if(t >= n){
+                    printf("error for t\n");
+                }
                 if(fabs(A[t*n + i]) > max){
                     maxind = t;
                     max = fabs(A[t*n + i]);
@@ -342,10 +369,16 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
             }
 
             for(j = i + 1; j <n;j++){
+                if(j >= n){
+                    printf("error for j\n");
+                }
                 A[j*n + i] = A[j*n + i] / A[i*n + i];
 
                 //block version
                 for(k = i + 1; k < i + b; k++){
+                    if(k >= n){
+                        printf("error for k\n");
+                    }
                     A[j*n + k] -= A[j*n + i] * A[i*n + k];
                 }
 
@@ -363,9 +396,18 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
         register double total;
         //end = ic + b
         for(i = ic; i < ic + b; i++){
+            if(i >= n){
+                printf("error for i\n");
+            }
             for(j= ic + b;j < n;j++){
+                if(j >= n){
+                    printf("error for j\n");
+                }
                 total = 0;
                 for(k = ic; k < i; k++){
+                    if(k >= n){
+                        printf("error for k\n");
+                    }
                     // A[i*n - j] -= A[i*n + k] * A[k*n + j];
 
                     total += A[i*n + k] * A[k*n + j];
