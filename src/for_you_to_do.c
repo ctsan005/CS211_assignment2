@@ -227,8 +227,7 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
                         for (kc=k1; kc<(kc + b); kc+=block_size){
                             if(kc >= n){
                                 printf("kc error\n");
-                                printf("%i\n",kc); 
-                                printf("%i\n",k1);
+                                printf("i1 = %i, j1 = %i, k1 = %i, ic = %i, jc = %i, kc = %i\n",i1,j1,k1,ic,jc,kc);
                                 return;
                             }
                             for(m = 0; m < block_size; m++){
