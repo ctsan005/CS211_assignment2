@@ -24,7 +24,7 @@ int test_all_lu_functions()
 {
     int block_size=get_block_size();
     int ni, nList[] = {9,18};
-    for (ni = 0; ni < sizeof(nList) / sizeof(nList[0]); ni++) {
+    for (ni = 0; ni < 2; ni++) {
         int n = nList[ni], i, j;
 
         // feel free to modify the block size by yourself.
