@@ -165,10 +165,12 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
     register int m;
     int block_size = 3;
 
-    for(; i < n; i += b){
-        for(;j < n; j += b){
-            for(; k < k + b; k += b){
-
+    for(i = i; i < n; i += b){
+        printf("i = %i", i);
+        for(j = j;j < n; j += b){
+            printf("j = %i", j);
+            for(k = k; k < k + b; k += b){
+                printf("k = %i", k);
 
                 for (ic=i; ic<(i + b); ic+=block_size){
                     for (jc=j; jc<(j + b); jc+=block_size) {
@@ -322,38 +324,41 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
             for(j = i + 1; j <n;j++){
                 A[j*n + i] = A[j*n + i] / A[i*n + i];
 
-                // for(k = i + 1; k < i + b; k++){
-                //     A[j*n + k] = A[j*n + k] - A[j*n + i] * A[i*n + k];
-                // }
-                for(k = i + 1; k < n; k++){
+                //block version
+                for(k = i + 1; k < i + b; k++){
                     A[j*n + k] = A[j*n + k] - A[j*n + i] * A[i*n + k];
                 }
+
+                //naive version - to test the top part of the code work
+                // for(k = i + 1; k < n; k++){
+                //     A[j*n + k] = A[j*n + k] - A[j*n + i] * A[i*n + k];
+                // }
             }
         }
 
         //update A(ib:end, end+1:n), basically same method as before, use the value store in A(ib:n, ib:end)
-        // register double total;
-        // //end = ic + b
-        // for(i = ic; i < ic + b; i++){
-        //     for(j= ic;j < n;j++){
-        //         total = 0;
-        //         for(k = ic; k < i; k++){
-        //             // A[i*n - j] -= A[i*n + k] * A[k*n + j];
-        //             total += A[i*n + k] * A[k*n + j];
-        //         }
-        //         A[i*n + j] -= total;
-        //     }
-        // }
+        register double total;
+        //end = ic + b
+        for(i = ic; i < ic + b; i++){
+            for(j= ic;j < n;j++){
+                total = 0;
+                for(k = ic; k < i; k++){
+                    // A[i*n - j] -= A[i*n + k] * A[k*n + j];
+                    total += A[i*n + k] * A[k*n + j];
+                }
+                A[i*n + j] -= total;
+            }
+        }
 
-        // for(i = ic; i < n;i++){
-        //     for(j = ic; j < n; j++){
+        for(i = ic; i < n;i++){
+            for(j = ic; j < n; j++){
 
-        //     }
-        // }
+            }
+        }
 
-        // // update A(end + 1: n , end + 1 : n)
-        // // end = ic + b
-        // mydgemm(A, A, A,n, ic + b, ic + b, ic, b);
+        // update A(end + 1: n , end + 1 : n)
+        // end = ic + b
+        mydgemm(A, A, A,n, ic + b, ic + b, ic, b);
     }
 
     
