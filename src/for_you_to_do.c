@@ -363,7 +363,7 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
         register double total;
         //end = ic + b
         for(i = ic; i < ic + b; i++){
-            for(j= ic;j < n;j++){
+            for(j= ic + b;j < n;j++){
                 total = 0;
                 for(k = ic; k < i; k++){
                     // A[i*n - j] -= A[i*n + k] * A[k*n + j];
