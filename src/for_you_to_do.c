@@ -165,15 +165,14 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
     register int m;
     int block_size = 3;
 
-    for(i = i; i < n; i += b){
-        printf("i = %i", i);
-        for(j = j;j < n; j += b){
-            printf("j = %i", j);
-            for(k = k; k < k + b; k += b){
-                printf("k = %i", k);
+    for(i1 = i; i1 < n; i1 += b){
+        printf("i = %i", i1);
+        for(j1 = j;j1 < n; j1 += b){
+            printf("j = %i", j1);
+            for(k1 = k; k1 < k1 + b; k1 += b){
 
-                for (ic=i; ic<(i + b); ic+=block_size){
-                    for (jc=j; jc<(j + b); jc+=block_size) {
+                for (ic=i1; ic<(ic + b); ic+=block_size){
+                    for (jc=j1; jc<(jc + b); jc+=block_size) {
 
                         //9 register used for matrix C
                         register double c00 = C[ic * n + jc];
@@ -188,9 +187,9 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
                         register double c21 = C[(ic + 2) * n + (jc + 1)];
                         register double c22 = C[(ic + 2) * n + (jc + 2)];
 
-                        double test = c00 + c01 + c02 + c10 + c11 + c12 + c20 + c21 + c22;
+                        // double test = c00 + c01 + c02 + c10 + c11 + c12 + c20 + c21 + c22;
 
-                        printf("test = %f", test);
+                        // printf("test = %f", test);
 
 
                         //6 registers INIT for A and B matrix
@@ -204,42 +203,42 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
                         register double b02;
                         // register double b03;
 
-                        // for (kc=k; kc<(k + b); kc+=block_size){
-                        //     for(m = 0; m < block_size; m++){
-                        //         a00 = A[ic * n + kc + m];
-                        //         a10 = A[(ic + 1)*n + kc + m];
-                        //         a20 = A[(ic + 2)*n + kc + m];
+                        for (kc=k1; kc<(kc + b); kc+=block_size){
+                            for(m = 0; m < block_size; m++){
+                                a00 = A[ic * n + kc + m];
+                                a10 = A[(ic + 1)*n + kc + m];
+                                a20 = A[(ic + 2)*n + kc + m];
 
-                        //         b00 = B[(kc + m) * n + (jc)];
-                        //         b01 = B[(kc + m) * n + (jc + 1)];
-                        //         b02 = B[(kc + m) * n + (jc + 2)];
+                                b00 = B[(kc + m) * n + (jc)];
+                                b01 = B[(kc + m) * n + (jc + 1)];
+                                b02 = B[(kc + m) * n + (jc + 2)];
 
-                        //         //Start doing the computing process
-                        //         c00 -= a00 * b00;
-                        //         c01 -= a00 * b01;
-                        //         c02 -= a00 * b02;
-                        //         c10 -= a10 * b00;
-                        //         c11 -= a10 * b01;
-                        //         c12 -= a10 * b02;
-                        //         c20 -= a20 * b00;
-                        //         c21 -= a20 * b01;
-                        //         c22 -= a20 * b02;
-                        //     }
+                                //Start doing the computing process
+                                c00 -= a00 * b00;
+                                c01 -= a00 * b01;
+                                c02 -= a00 * b02;
+                                c10 -= a10 * b00;
+                                c11 -= a10 * b01;
+                                c12 -= a10 * b02;
+                                c20 -= a20 * b00;
+                                c21 -= a20 * b01;
+                                c22 -= a20 * b02;
+                            }
                             
 
-                        // }
-                        // //Write back the value to matrix C
-                        // C[ic * n + jc] = c00;
-                        // C[ic * n + (jc + 1)] = c01;
-                        // C[ic * n + (jc + 2)] = c02;
+                        }
+                        //Write back the value to matrix C
+                        C[ic * n + jc] = c00;
+                        C[ic * n + (jc + 1)] = c01;
+                        C[ic * n + (jc + 2)] = c02;
 
-                        // C[(ic + 1) * n + jc] = c10;
-                        // C[(ic + 1) * n + (jc + 1)] = c11;
-                        // C[(ic + 1) * n + (jc + 2)] = c12;
+                        C[(ic + 1) * n + jc] = c10;
+                        C[(ic + 1) * n + (jc + 1)] = c11;
+                        C[(ic + 1) * n + (jc + 2)] = c12;
 
-                        // C[(ic + 2) * n + jc] = c20;
-                        // C[(ic + 2) * n + (jc + 1)] = c21;
-                        // C[(ic + 2) * n + (jc + 2)] = c22;
+                        C[(ic + 2) * n + jc] = c20;
+                        C[(ic + 2) * n + (jc + 1)] = c21;
+                        C[(ic + 2) * n + (jc + 2)] = c22;
 
                     }
                 }
