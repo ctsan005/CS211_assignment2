@@ -368,28 +368,26 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
 
             }
 
-            
-        }
-
-        for(j = ic + 1; j <n;j++){
-            if(j >= n){
-                printf("error for j\n");
-            }
-            A[j*n + ic] = A[j*n + ic] / A[i*n + ic];
-
-            //block version
-            for(k = ic + 1; k < ic + b; k++){
-                printf("i,j,k value = %i, %i, %i\n", ic,j,k);
-                if(k >= n){
-                    printf("error for k\n");
+            for(j = i + 1; j <n;j++){
+                if(j >= n){
+                    printf("error for j\n");
                 }
-                A[j*n + k] -= A[j*n + ic] * A[ic*n + k];
-            }
+                A[j*n + i] = A[j*n + i] / A[i*n + i];
 
-            //naive version - to test the top part of the code work
-            // for(k = i + 1; k < n; k++){
-            //     A[j*n + k] = A[j*n + k] - A[j*n + i] * A[i*n + k];
-            // }
+                //block version
+                for(k = i + 1; k < ic + b; k++){
+                    printf("i,j,k value = %i, %i, %i\n", i,j,k);
+                    if(k >= n){
+                        printf("error for k\n");
+                    }
+                    A[j*n + k] -= A[j*n + i] * A[i*n + k];
+                }
+
+                //naive version - to test the top part of the code work
+                // for(k = i + 1; k < n; k++){
+                //     A[j*n + k] = A[j*n + k] - A[j*n + i] * A[i*n + k];
+                // }
+            }
         }
 
         printf("print A before update A(ib:end, end+1:n)\n");
