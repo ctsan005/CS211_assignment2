@@ -23,7 +23,7 @@
 int test_all_lu_functions()
 {
     int block_size=get_block_size();
-    int ni, nList[] = {1000, 2000, 3000, 4000, 5000};
+    int ni, nList[] = {9,18};
     for (ni = 0; ni < sizeof(nList) / sizeof(nList[0]); ni++) {
         int n = nList[ni], i, j;
 
@@ -72,8 +72,11 @@ int test_all_lu_functions()
         t1 = get_sec();
         printf("Elapsed time, block LU: %lf seconds\n", t1 - t0);
 
-        if (verify_matrix(A1, A3, n, n) || verify_matrix(B1, B3, n, 1))
+        if (verify_matrix(A1, A3, n, n) || verify_matrix(B1, B3, n, 1)){
             printf("my block LU is incorrect.\n");
+            print_matrix(A3);
+            print_matrix(A1);
+        }
 
         free(A1);
         free(A2);
