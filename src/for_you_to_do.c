@@ -375,9 +375,9 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
                 A[j*n + i] = A[j*n + i] / A[i*n + i];
 
                 //block version
-                for(k = i + 1; k < i + b -1; k++){
+                for(k = i + 1; k < i + b && k < n; k++){
                     if(k >= n){
-                        printf("error for k in pivot\n");
+                        printf("error for k\n");
                     }
                     A[j*n + k] -= A[j*n + i] * A[i*n + k];
                 }
