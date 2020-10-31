@@ -3,7 +3,7 @@
 int get_block_size(){
     //return the block size you'd like to use 
     /*add your code here */
-    return 129;
+    return 9;
   
 }
 
@@ -216,12 +216,9 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
                             //     return;
                             // }
 
-                            
+
                             for(m = 0; m < block_size; m++){
-                                if(m >= n){
-                                    printf("m error\n");
-                                    return;
-                                }
+                                
                                 a00 = A[ic * n + kc + m];
                                 a10 = A[(ic + 1)*n + kc + m];
                                 a20 = A[(ic + 2)*n + kc + m];
