@@ -166,34 +166,16 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
     int block_size = 3;
 
     for(i1 = i; i1 < n; i1 += b){
-        if(i1 >= n){
-            printf("i1 error\n");
-            return;
-        }
-        // printf("i = %i", i1);
+
         for(j1 = j;j1 < n; j1 += b){
-            // printf("j = %i", j1);
-            if(j1 >= n){
-                printf("j1 error\n");
-                return;
-            }
+
             for(k1 = k; k1 < k + b; k1 += b){
-                if(k1 >= n){
-                    printf("k1 error\n");
-                    return;
-                }
+
 
                 for (ic=i1; ic<(i1 + b); ic+=block_size){
-                    if(ic >= n){
-                        printf("ic error\n");
-                        return;
-                    }
+
                     for (jc=j1; jc<(j1 + b); jc+=block_size) {
 
-                        if(jc >= n){
-                            printf("jc error\n");
-                            return;
-                        }
 
                         //9 register used for matrix C
                         register double c00 = C[ic * n + jc];
@@ -225,11 +207,16 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
                         // register double b03;
 
                         for (kc=k1; kc<(k1 + b); kc+=block_size){
-                            if(kc >= n){
-                                printf("kc error\n");
-                                printf("i1 = %i, j1 = %i, k1 = %i, ic = %i, jc = %i, kc = %i\n",i1,j1,k1,ic,jc,kc);
-                                return;
-                            }
+
+                            //use for debug
+
+                            // if(kc >= n){
+                            //     printf("kc error\n");
+                            //     printf("i1 = %i, j1 = %i, k1 = %i, ic = %i, jc = %i, kc = %i\n",i1,j1,k1,ic,jc,kc);
+                            //     return;
+                            // }
+
+                            
                             for(m = 0; m < block_size; m++){
                                 if(m >= n){
                                     printf("m error\n");
