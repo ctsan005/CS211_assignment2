@@ -376,7 +376,7 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
 
                 //block version
                 for(k = i + 1; k < i + b; k++){
-                    printf("i,j,k value = %i, %i, %i", i,j,k);
+                    printf("i,j,k value = %i, %i, %i\n", i,j,k);
                     if(k >= n){
                         printf("error for k\n");
                     }
