@@ -367,8 +367,6 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
             }
         }
 
-        printf("print A before update A(ib:end, end+1:n)\n");
-        print_matrix(A,n,n);
 
         //update A(ib:end, end+1:n), basically same method as before, use the value store in A(ib:n, ib:end)
         register double total;
