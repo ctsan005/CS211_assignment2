@@ -354,12 +354,6 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
             }
         }
 
-        for(i = ic; i < n;i++){
-            for(j = ic; j < n; j++){
-
-            }
-        }
-
         // update A(end + 1: n , end + 1 : n)
         // end = ic + b
         mydgemm(A, A, A,n, ic + b, ic + b, ic, b);
