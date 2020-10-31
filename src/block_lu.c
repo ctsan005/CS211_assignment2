@@ -16,7 +16,7 @@ void block_lu(double *A, double *B, int n, int b)
         return;
     }
 
-    // mydtrsv('L', A, B, n, ipiv);
-    // mydtrsv('U', A, B, n, ipiv);
+    mydtrsv('L', A, B, n, ipiv);
+    mydtrsv('U', A, B, n, ipiv);
 
 }

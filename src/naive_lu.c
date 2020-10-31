@@ -16,7 +16,7 @@ void naive_lu(double *A, double *B, int n)
         return;
     }
 
-    // mydtrsv('L', A, B, n, ipiv);
-    // mydtrsv('U', A, B, n, ipiv);
+    mydtrsv('L', A, B, n, ipiv);
+    mydtrsv('U', A, B, n, ipiv);
 
 }

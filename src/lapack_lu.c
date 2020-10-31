@@ -23,6 +23,6 @@ void lapack_lu(double *A, double *B, int n)
         B[i] = tmp;
     }
     
-    // cblas_dtrsv(CblasRowMajor, CblasLower, CblasNoTrans, CblasUnit, n, A, n, B, 1);
-    // cblas_dtrsv(CblasRowMajor, CblasUpper, CblasNoTrans, CblasNonUnit, n, A, n, B, 1);
+    cblas_dtrsv(CblasRowMajor, CblasLower, CblasNoTrans, CblasUnit, n, A, n, B, 1);
+    cblas_dtrsv(CblasRowMajor, CblasUpper, CblasNoTrans, CblasNonUnit, n, A, n, B, 1);
 }
