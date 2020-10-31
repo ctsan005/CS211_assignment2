@@ -165,6 +165,7 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
     register int m;
     int block_size = 3;
 
+    printf("print A in mydgemm\n");
     print_matrix(A, n,n);
 
     for(i1 = i; i1 < n; i1 += b){
@@ -354,6 +355,9 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
                 // }
             }
         }
+
+        printf("print A before update A(ib:end, end+1:n)\n");
+        print_matrix(A,n,n);
 
         //update A(ib:end, end+1:n), basically same method as before, use the value store in A(ib:n, ib:end)
         register double total;
