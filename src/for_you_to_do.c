@@ -3,7 +3,7 @@
 int get_block_size(){
     //return the block size you'd like to use 
     /*add your code here */
-    return 3;
+    return 6;
   
 }
 
@@ -346,7 +346,7 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
 
                 //block version
                 for(k = i + 1; k < i + b; k++){
-                    A[j*n + k] = A[j*n + k] - A[j*n + i] * A[i*n + k];
+                    A[j*n + k] -= A[j*n + i] * A[i*n + k];
                 }
 
                 //naive version - to test the top part of the code work
