@@ -166,25 +166,34 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
     int block_size = 3;
 
     for(i1 = i; i1 < n; i1 += b){
-        if(i1 > n){
+        if(i1 >= n){
             printf("i1 error\n");
-            return -1;
+            return;
         }
         // printf("i = %i", i1);
         for(j1 = j;j1 < n; j1 += b){
             // printf("j = %i", j1);
-            if(j1 > n){
+            if(j1 >= n){
                 printf("j1 error\n");
-                return -1;
+                return;
             }
             for(k1 = k; k1 < k1 + b; k1 += b){
-                if(k1 > n){
+                if(k1 >= n){
                     printf("k1 error\n");
-                    return -1;
+                    return;
                 }
 
                 for (ic=i1; ic<(ic + b); ic+=block_size){
+                    if(ic >= n){
+                        printf("ic error\n");
+                        return;
+                    }
                     for (jc=j1; jc<(jc + b); jc+=block_size) {
+
+                        if(jc >= n){
+                            printf("jc error\n");
+                            return;
+                        }
 
                         //9 register used for matrix C
                         register double c00 = C[ic * n + jc];
@@ -216,7 +225,15 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
                         // register double b03;
 
                         for (kc=k1; kc<(kc + b); kc+=block_size){
+                            if(kc >= n){
+                                printf("kc error\n");
+                                return;
+                            }
                             for(m = 0; m < block_size; m++){
+                                if(m >= n){
+                                    printf("m error\n");
+                                    return;
+                                }
                                 a00 = A[ic * n + kc + m];
                                 a10 = A[(ic + 1)*n + kc + m];
                                 a20 = A[(ic + 2)*n + kc + m];
