@@ -322,29 +322,28 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
             for(j = i + 1; j <n;j++){
                 A[j*n + i] = A[j*n + i] / A[i*n + i];
 
-                for(k = i + 1; k < i + b; k++){
+                // for(k = i + 1; k < i + b; k++){
+                //     A[j*n + k] = A[j*n + k] - A[j*n + i] * A[i*n + k];
+                // }
+                for(k = i + 1; k < n; k++){
                     A[j*n + k] = A[j*n + k] - A[j*n + i] * A[i*n + k];
                 }
             }
         }
 
         //update A(ib:end, end+1:n), basically same method as before, use the value store in A(ib:n, ib:end)
-        register double total;
-        //end = ic + b
-        for(i = ic; i < ic + b; i++){
-            for(j= ic;j < n;j++){
-                total = 0;
-                // for(k = ic; k < i; k++){
-                //     // A[i*n - j] -= A[i*n + k] * A[k*n + j];
-                //     total += A[i*n + k] * A[k*n + j];
-                // }
-                for(k = ic; k < n; k++){
-                    // A[i*n - j] -= A[i*n + k] * A[k*n + j];
-                    total += A[i*n + k] * A[k*n + j];
-                }
-                A[i*n + j] -= total;
-            }
-        }
+        // register double total;
+        // //end = ic + b
+        // for(i = ic; i < ic + b; i++){
+        //     for(j= ic;j < n;j++){
+        //         total = 0;
+        //         for(k = ic; k < i; k++){
+        //             // A[i*n - j] -= A[i*n + k] * A[k*n + j];
+        //             total += A[i*n + k] * A[k*n + j];
+        //         }
+        //         A[i*n + j] -= total;
+        //     }
+        // }
 
         // for(i = ic; i < n;i++){
         //     for(j = ic; j < n; j++){
