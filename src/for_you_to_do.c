@@ -369,7 +369,7 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
                     // A[i*n - j] -= A[i*n + k] * A[k*n + j];
 
                     total += A[i*n + k] * A[k*n + j];
-                    printf("i = %i, j = %i, j = %i\n",i,j,k);
+                    printf("i = %i, j = %i, k = %i\n",i,j,k);
                     printf("A[i*n + k] * A[k*n + j] = %f\n", A[i*n + k] * A[k*n + j]);
                 }
                 printf("total = %f\n", total);
