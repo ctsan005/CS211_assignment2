@@ -166,10 +166,22 @@ void mydgemm(double *A, double *B, double *C, int n, int i, int j, int k, int b)
     int block_size = 3;
 
     for(i1 = i; i1 < n; i1 += b){
+        if(i1 > n){
+            printf("i1 error\n");
+            return -1;
+        }
         // printf("i = %i", i1);
         for(j1 = j;j1 < n; j1 += b){
             // printf("j = %i", j1);
+            if(j1 > n){
+                printf("j1 error\n");
+                return -1;
+            }
             for(k1 = k; k1 < k1 + b; k1 += b){
+                if(k1 > n){
+                    printf("k1 error\n");
+                    return -1;
+                }
 
                 for (ic=i1; ic<(ic + b); ic+=block_size){
                     for (jc=j1; jc<(jc + b); jc+=block_size) {
