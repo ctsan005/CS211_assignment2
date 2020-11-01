@@ -31,10 +31,14 @@ int mydgetrf(double *A, int *ipiv, int n)
     /* add your code here */
     int i, maxind;
     double max;
+
+
     for(i = 0; i < n - 1; i++){
         maxind = i;
         max = fabs(A[i*n + i]);
         int t;
+
+        // pivoting the matrix to find the maximum number
         for(t = i+1; t < n; t++){
             if(fabs(A[t*n + i]) > max){
                 maxind = t;
@@ -47,8 +51,10 @@ int mydgetrf(double *A, int *ipiv, int n)
             return -1;
         }
         else{
+
+            //case when need to swap the row
             if(maxind != i){
-                // save pivoting information
+                //swap pivoting information
                 int temps= ipiv[i];
                 ipiv[i] = ipiv[maxind];
                 ipiv[maxind] = temps;
@@ -71,6 +77,7 @@ int mydgetrf(double *A, int *ipiv, int n)
 
         }
 
+        //update A(i+1:n, i+1:n)
         int j;
         for(j = i + 1; j <n;j++){
             A[j*n + i] = A[j*n + i] / A[i*n + i];
@@ -326,6 +333,7 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
             //     printf("error in i\n\n\n");
             // }
 
+            // pivoting the matrix to find the maximum number
             maxind = i;
             max = fabs(A[i*n + i]);
             for(t = i+1; t < n; t++){
@@ -336,13 +344,16 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
                 }
             }
 
+            
             if(max == 0){
                 printf("LU factoration failed: coefficient matrix is singular");
                 return -1;
             }
             else{
+
+                //The case that need to swap the row
                 if(maxind != i){
-                    // save pivoting information
+                    //swap pivoting information
                     int temps= ipiv[i];
                     ipiv[i] = ipiv[maxind];
                     ipiv[maxind] = temps;
@@ -356,7 +367,7 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
                     //     A[maxind * n + j] = k;
                     // }
 
-                    //swap row method 2 -- need to test which one is faster
+                    //swap row method 2 -- seem like not too much difference than method one, but this look a bit cleaner
                     double trow[n];
                     memcpy(trow, A + i * n, n*sizeof(double));
                     memcpy(A + i * n, A + maxind * n, n*sizeof(double));
@@ -365,6 +376,7 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
 
             }
 
+            //update the lower triangle of A(ic:end , ic:end) and A(end+1:n , ic:end)
             for(j = i + 1; j <n;j++){
                 // if(j > n){
                 //     printf("error in j\n\n\n");
@@ -386,7 +398,7 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
         }
 
 
-        //update A(ib:end, end+1:n), basically same method as before, use the value store in A(ib:n, ib:end)
+        //update A(ic:end, end+1:n), basically same method as before, use the value store in A(ic:n, ic:end)
         register double total;
         //end = ic + b
         for(i = ic; i < ic + b; i++){
