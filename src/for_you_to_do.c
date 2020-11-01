@@ -117,7 +117,8 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
     double sum;
     /* add your code here */
     if(UPLO == 'L'){
-        double y[n];
+        // double y[n];
+        double *y = (double *)malloc(sizeof(double)*n);
         
         y[0] = B[ipiv[0]];
         for(i = 1; i < n; i++ ){
@@ -131,10 +132,12 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
         for(i = 0; i < n; i++){
             B[i] = y[i];
         }
+        free(y);
     }
 
     else if(UPLO == 'U'){
-        double x[n];
+        // double x[n];
+        double *x = (double *)malloc(sizeof(double)*n);
         int i,j;
         double sum;
 
@@ -150,6 +153,7 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
         for(i = 0; i < n; i++){
             B[i] = x[i];
         }
+        free(x);
     }
     return;
 }
