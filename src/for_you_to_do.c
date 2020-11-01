@@ -3,7 +3,7 @@
 int get_block_size(){
     //return the block size you'd like to use 
     /*add your code here */
-    return 186;
+    return 129;
   
 }
 
@@ -29,59 +29,59 @@ int get_block_size(){
 int mydgetrf(double *A, int *ipiv, int n) 
 {
     /* add your code here */
-    // int i, maxind;
-    // double max;
-    // for(i = 0; i < n; i++){
-    //     maxind = i;
-    //     max = fabs(A[i*n + i]);
-    //     int t;
-    //     for(t = i+1; t < n; t++){
-    //         if(fabs(A[t*n + i]) > max){
-    //             maxind = t;
-    //             max = fabs(A[t*n + i]);
-    //         }
-    //     }
+    int i, maxind;
+    double max;
+    for(i = 0; i < n; i++){
+        maxind = i;
+        max = fabs(A[i*n + i]);
+        int t;
+        for(t = i+1; t < n; t++){
+            if(fabs(A[t*n + i]) > max){
+                maxind = t;
+                max = fabs(A[t*n + i]);
+            }
+        }
 
-    //     if(max == 0){
-    //         printf("LU factoration failed: coefficient matrix is singular");
-    //         return -1;
-    //     }
-    //     else{
-    //         if(maxind != i){
-    //             // save pivoting information
-    //             int temps= ipiv[i];
-    //             ipiv[i] = ipiv[maxind];
-    //             ipiv[maxind] = temps;
+        if(max == 0){
+            printf("LU factoration failed: coefficient matrix is singular");
+            return -1;
+        }
+        else{
+            if(maxind != i){
+                // save pivoting information
+                int temps= ipiv[i];
+                ipiv[i] = ipiv[maxind];
+                ipiv[maxind] = temps;
 
-    //             //swap row for matrix method 1
-    //             // int j;
-    //             // for(j = 0; j < n; j++){
-    //             //     double k;
-    //             //     k = A[i * n + j];
-    //             //     A[i * n + j] = A[maxind * n + j];
-    //             //     A[maxind * n + j] = k;
-    //             // }
+                //swap row for matrix method 1
+                // int j;
+                // for(j = 0; j < n; j++){
+                //     double k;
+                //     k = A[i * n + j];
+                //     A[i * n + j] = A[maxind * n + j];
+                //     A[maxind * n + j] = k;
+                // }
 
-    //             //swap row method 2 -- need to test which one is faster
-    //             double trow[n];
-    //             memcpy(trow, A + i * n, n*sizeof(double));
-    //             memcpy(A + i * n, A + maxind * n, n*sizeof(double));
-    //             memcpy(A + maxind * n, trow, n*sizeof(double));
-    //         }
+                //swap row method 2 -- need to test which one is faster
+                double trow[n];
+                memcpy(trow, A + i * n, n*sizeof(double));
+                memcpy(A + i * n, A + maxind * n, n*sizeof(double));
+                memcpy(A + maxind * n, trow, n*sizeof(double));
+            }
 
-    //     }
+        }
 
-    //     int j;
-    //     for(j = i + 1; j <n;j++){
-    //         A[j*n + i] = A[j*n + i] / A[i*n + i];
-    //         int k;
-    //         for(k =  i + 1; k < n; k++){
-    //             A[j*n + k] = A[j*n + k] - A[j*n + i] * A[i*n + k];
-    //         }
-    //     }
-    // }
+        int j;
+        for(j = i + 1; j <n;j++){
+            A[j*n + i] = A[j*n + i] / A[i*n + i];
+            int k;
+            for(k =  i + 1; k < n; k++){
+                A[j*n + k] = A[j*n + k] - A[j*n + i] * A[i*n + k];
+            }
+        }
+    }
 
-    // return 0;
+    return 0;
 }
 
 /**
@@ -317,14 +317,14 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
     double max;
 
     for(ic = 0; ic <n;ic +=b){
-        if(ic > n){
-            printf("error in ic\n\n\n");
-        }
+        // if(ic > n){
+        //     printf("error in ic\n\n\n");
+        // }
 
         for(i = ic; i < ic+b ; i++){
-            if(i > n){
-                printf("error in i\n\n\n");
-            }
+            // if(i > n){
+            //     printf("error in i\n\n\n");
+            // }
 
             maxind = i;
             max = fabs(A[i*n + i]);
@@ -366,9 +366,9 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
             }
 
             for(j = i + 1; j <n;j++){
-                if(j > n){
-                    printf("error in j\n\n\n");
-                }
+                // if(j > n){
+                //     printf("error in j\n\n\n");
+                // }
 
                 A[j*n + i] = A[j*n + i] / A[i*n + i];
 
@@ -390,20 +390,20 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
         register double total;
         //end = ic + b
         for(i = ic; i < ic + b; i++){
-            if(i > n){
-                printf("error in i\n\n\n");
-            }
+            // if(i > n){
+            //     printf("error in i\n\n\n");
+            // }
 
             for(j= ic + b;j < n;j++){
-                if(j > n){
-                    printf("error in j\n\n\n");
-                }
+                // if(j > n){
+                //     printf("error in j\n\n\n");
+                // }
 
                 total = 0;
                 for(k = ic; k < i; k++){
-                    if(k > n){
-                        printf("error in k\n\n\n");
-                    }
+                    // if(k > n){
+                    //     printf("error in k\n\n\n");
+                    // }
 
                     //naive version, abandon
                     // A[i*n - j] -= A[i*n + k] * A[k*n + j];
