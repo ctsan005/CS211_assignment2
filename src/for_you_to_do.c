@@ -3,7 +3,7 @@
 int get_block_size(){
     //return the block size you'd like to use 
     /*add your code here */
-    return 129;
+    return 186;
   
 }
 
@@ -117,8 +117,13 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
     double sum;
     /* add your code here */
     if(UPLO == 'L'){
-        // double y[n];
-        double *y = (double *)malloc(sizeof(double)*n);
+        //method 1 local array
+        double y[n];
+
+        //method 2, alloc space
+        // double *y = (double *)malloc(sizeof(double)*n);
+
+        //compare: not much difference in time, so just use method 1
         
         y[0] = B[ipiv[0]];
         for(i = 1; i < n; i++ ){
@@ -153,7 +158,7 @@ void mydtrsv(char UPLO, double *A, double *B, int n, int *ipiv)
         for(i = 0; i < n; i++){
             B[i] = x[i];
         }
-        free(x);
+        // free(x);
     }
     return;
 }
@@ -382,8 +387,10 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
                 total = 0;
                 for(k = ic; k < i; k++){
 
+                    //naive version, abandon
                     // A[i*n - j] -= A[i*n + k] * A[k*n + j];
 
+                    //new version, reduce access element
                     total += A[i*n + k] * A[k*n + j];
                 }
                 A[i*n + j] -= total;
