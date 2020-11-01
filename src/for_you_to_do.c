@@ -317,8 +317,14 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
     double max;
 
     for(ic = 0; ic <n;ic +=b){
+        if(ic > n){
+            printf("error in ic\n\n\n");
+        }
 
         for(i = ic; i < ic+b ; i++){
+            if(i > n){
+                printf("error in i\n\n\n");
+            }
 
             maxind = i;
             max = fabs(A[i*n + i]);
@@ -360,6 +366,9 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
             }
 
             for(j = i + 1; j <n;j++){
+                if(j > n){
+                    printf("error in j\n\n\n");
+                }
 
                 A[j*n + i] = A[j*n + i] / A[i*n + i];
 
@@ -381,11 +390,20 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
         register double total;
         //end = ic + b
         for(i = ic; i < ic + b; i++){
+            if(i > n){
+                printf("error in i\n\n\n");
+            }
 
             for(j= ic + b;j < n;j++){
+                if(j > n){
+                    printf("error in j\n\n\n");
+                }
 
                 total = 0;
                 for(k = ic; k < i; k++){
+                    if(k > n){
+                        printf("error in k\n\n\n");
+                    }
 
                     //naive version, abandon
                     // A[i*n - j] -= A[i*n + k] * A[k*n + j];
