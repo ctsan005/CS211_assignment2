@@ -316,7 +316,7 @@ int mydgetrf_block(double *A, int *ipiv, int n, int b)
     int i,j,k,ic,t, maxind;
     double max;
 
-    for(ic = 0; ic <n;ic +=b){
+    for(ic = 0; ic <n - 1;ic +=b){
         // if(ic > n){
         //     printf("error in ic\n\n\n");
         // }
