@@ -31,7 +31,7 @@ int mydgetrf(double *A, int *ipiv, int n)
     /* add your code here */
     int i, maxind;
     double max;
-    for(i = 0; i < n; i++){
+    for(i = 0; i < n - 1; i++){
         maxind = i;
         max = fabs(A[i*n + i]);
         int t;
